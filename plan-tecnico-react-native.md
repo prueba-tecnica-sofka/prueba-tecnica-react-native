@@ -331,14 +331,14 @@ describe('ProductForm', () => {
 ### Fase 1: Setup & Fundaciones 
 - [x] Inicializar proyecto React Native + TypeScript
 - [x] Estructura de carpetas
-- [ ] Configurar Jest + Testing Library
-- [ ] Theme system (colores, tipografía, espaciado)
+- [x] Configurar Jest + Testing Library
+- [x] Theme system (colores, tipografía, espaciado)
 
 ### Fase 2: Componentes Base 
-- [ ] Button component + tests
-- [ ] Input component + tests
-- [ ] ErrorMessage component + tests
-- [ ] LoadingSpinner component
+- [x] Button component + tests
+- [x] Input component + tests
+- [x] ErrorMessage component + tests
+- [x] LoadingSpinner component
 
 ### Fase 3: API & Store 
 - [ ] API client con interceptors
