@@ -57,6 +57,23 @@ describe('productsApi', () => {
     expect(result).toEqual([mockProduct]);
   });
 
+  it('getProductById calls endpoint with id and returns product data', async () => {
+    mockedApiClient.get.mockResolvedValue({ data: mockProduct });
+
+    const result = await productsApi.getProductById(mockProduct.id);
+
+    expect(mockedApiClient.get).toHaveBeenCalledWith(`/bp/products/${mockProduct.id}`);
+    expect(result).toEqual(mockProduct);
+  });
+
+  it('getProductById propagates API errors', async () => {
+    const error = new Error('network fail');
+    mockedApiClient.get.mockRejectedValue(error);
+
+    await expect(productsApi.getProductById('unknown-id')).rejects.toThrow('network fail');
+    expect(mockedApiClient.get).toHaveBeenCalledWith('/bp/products/unknown-id');
+  });
+
   it('createProduct posts payload and returns created product', async () => {
     mockedApiClient.post.mockResolvedValue({ data: mockProduct });
 

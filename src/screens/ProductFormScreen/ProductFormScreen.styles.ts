@@ -1,39 +1,107 @@
-import { Platform, StyleSheet } from 'react-native';  
-import { theme } from '../../theme';  
-  
-export const formStyles = StyleSheet.create({  
-  container: {  
-    flex: 1,  
-    backgroundColor: theme.colors.backgroundSecondary,  
-  },  
-  header: {  
-    backgroundColor: theme.colors.primary,  
-    paddingVertical: theme.spacing.md,  
-    paddingHorizontal: theme.spacing.lg,  
-    paddingTop: Platform.OS === 'ios' ? 50 : theme.spacing.lg,  
-  },  
-  headerTitle: {  
-    fontSize: theme.typography.fontSize.xl,  
-    fontWeight: theme.typography.fontWeight.bold,  
-    color: theme.colors.text,  
-  },  
-  scrollView: {  
-    flex: 1,  
-  },  
-  scrollContent: {  
-    padding: theme.spacing.lg,  
-  },  
-  form: {  
-    gap: theme.spacing.md,  
-  },  
-  checkingText: {  
-    fontSize: theme.typography.fontSize.sm,  
-    color: theme.colors.textSecondary,  
-    marginTop: -theme.spacing.sm,  
-    marginBottom: theme.spacing.sm,  
-    marginLeft: theme.spacing.sm,  
-  },  
-  buttonContainer: {  
-    marginTop: theme.spacing.md,  
-  },  
+import { Platform, StyleSheet } from 'react-native';
+import { theme } from '../../theme';
+
+export const formStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.backgroundSecondary,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: theme.spacing['2xl'],
+    backgroundColor: theme.colors.backgroundSecondary,
+  },
+  loadingText: {
+    marginTop: theme.spacing.md,
+    color: theme.colors.textSecondary,
+    fontSize: theme.typography.fontSize.base,
+    fontWeight: theme.typography.fontWeight.medium,
+    textAlign: 'center',
+  },
+  header: {
+    backgroundColor: theme.colors.background,
+    marginHorizontal: theme.spacing.lg,
+    marginTop: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
+    paddingVertical: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: Platform.OS === 'ios' ? theme.spacing['3xl'] : theme.spacing['2xl'],
+    borderRadius: theme.spacing.borderRadius.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.borderLight,
+    shadowColor: theme.colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  headerEyebrow: {
+    color: theme.colors.primaryDark,
+    fontSize: theme.typography.fontSize.xs,
+    fontWeight: theme.typography.fontWeight.bold,
+    letterSpacing: 1,
+    marginBottom: theme.spacing.xs,
+    textTransform: 'uppercase',
+  },
+  headerTitle: {
+    fontSize: theme.typography.fontSize.xl,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.text,
+    letterSpacing: 0.2,
+  },
+  headerSubtitle: {
+    marginTop: theme.spacing.xs,
+    color: theme.colors.textSecondary,
+    fontSize: theme.typography.fontSize.base,
+    lineHeight: theme.typography.fontSize.base * theme.typography.lineHeight.normal,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing['4xl'],
+  },
+  form: {
+    gap: theme.spacing.md,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.spacing.borderRadius.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.borderLight,
+    padding: theme.spacing.lg,
+    shadowColor: theme.colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  formSectionHeader: {
+    marginBottom: theme.spacing.xs,
+  },
+  formTitle: {
+    color: theme.colors.text,
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: theme.typography.fontWeight.bold,
+    marginBottom: theme.spacing.xs,
+  },
+  formDescription: {
+    color: theme.colors.textSecondary,
+    fontSize: theme.typography.fontSize.sm,
+    lineHeight: theme.typography.fontSize.sm * theme.typography.lineHeight.normal,
+  },
+  checkingText: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.textSecondary,
+    marginTop: -theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+    marginLeft: theme.spacing.sm,
+  },
+  buttonContainer: {
+    marginTop: theme.spacing.sm,
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.borderLight,
+  },
 });

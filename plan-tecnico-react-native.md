@@ -371,16 +371,14 @@ describe('ProductForm', () => {
 - [x] Botón flotante "Agregar"
 
 ### Fase 7: F5 - Editar Producto 
-- [ ] ProductFormScreen (modo edit)
-- [ ] Pre-carga de datos
-- [ ] ID field disabled
-- [ ] Botón "Editar" en detalle
-- [ ] Tests
+- [x] ProductFormScreen (modo edit)
+- [x] Pre-carga de datos
+- [x] ID field disabled
+- [x] Botón "Editar" en detalle
+- [x] Tests
 
 ### Fase 8: Pulido & Testing 
 - [ ] Alcanzar ≥70% coverage
-- [ ] Refactorizar código duplicado
-- [ ] Aplicar principios SOLID
 - [ ] Manejo de errores visuales
 - [ ] Loading states
 - [ ] Empty states

@@ -93,6 +93,19 @@ describe('ProductFormScreen', () => {
     const { getByText } = renderWithNavigation('edit');  
     expect(getByText('Editar Producto')).toBeTruthy();  
   });  
+
+  it('shows preloading state while loading edit product', () => {
+    mockUseProductForm.mockReturnValue({
+      ...defaultProps,
+      mode: 'edit' as const,
+      isLoading: true,
+    });
+
+    const { getByTestId, getByText } = renderWithNavigation('edit');
+
+    expect(getByTestId('product-form-loading')).toBeTruthy();
+    expect(getByText('Cargando producto...')).toBeTruthy();
+  });
   
   it('renders all form fields', () => {  
     const { getByTestId } = renderWithNavigation();  

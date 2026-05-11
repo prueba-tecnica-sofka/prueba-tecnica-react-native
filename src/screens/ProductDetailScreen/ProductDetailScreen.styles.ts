@@ -1,0 +1,85 @@
+import { Platform, StyleSheet } from 'react-native';
+import { theme } from '../../theme';
+
+export const productDetailStyles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: theme.colors.gray50,
+	},
+	scrollContent: {
+		paddingHorizontal: theme.spacing.lg,
+		paddingTop: theme.spacing.xl,
+		paddingBottom: theme.spacing['4xl'],
+		gap: theme.spacing.xl,
+	},
+	header: {
+		backgroundColor: theme.colors.white,
+		paddingHorizontal: theme.spacing.lg,
+		paddingVertical: theme.spacing.xl,
+		paddingTop: Platform.OS === 'ios' ? theme.spacing['4xl'] : theme.spacing['3xl'],
+		borderRadius: theme.spacing.borderRadius.lg,
+		borderWidth: 1,
+		borderColor: theme.colors.primaryLight,
+		borderLeftWidth: 4,
+		borderLeftColor: theme.colors.primary,
+		shadowColor: theme.colors.black,
+		shadowOffset: { width: 0, height: 5 },
+		shadowOpacity: 0.08,
+		shadowRadius: 10,
+		elevation: 3,
+	},
+	eyebrow: {
+		color: theme.colors.primaryDark,
+		fontSize: theme.typography.fontSize.xs,
+		fontWeight: theme.typography.fontWeight.bold,
+		letterSpacing: 1.1,
+		textTransform: 'uppercase',
+		marginBottom: theme.spacing.sm,
+	},
+	title: {
+		fontSize: theme.typography.fontSize['2xl'],
+		fontWeight: theme.typography.fontWeight.bold,
+		color: theme.colors.gray900,
+		letterSpacing: 0.1,
+		marginBottom: theme.spacing.md,
+	},
+	subtitle: {
+		fontSize: theme.typography.fontSize.base,
+		color: theme.colors.gray600,
+		lineHeight:
+			theme.typography.fontSize.base * theme.typography.lineHeight.relaxed,
+	},
+	card: {
+		backgroundColor: theme.colors.white,
+		borderRadius: theme.spacing.borderRadius.lg,
+		paddingHorizontal: theme.spacing.lg,
+		paddingVertical: theme.spacing.xl,
+		borderWidth: 1,
+		borderColor: theme.colors.border,
+		shadowColor: theme.colors.black,
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.07,
+		shadowRadius: 8,
+		elevation: 2,
+	},
+	label: {
+		fontSize: theme.typography.fontSize.sm,
+		fontWeight: theme.typography.fontWeight.medium,
+		color: theme.colors.gray500,
+		marginBottom: theme.spacing.sm,
+		textTransform: 'uppercase',
+		letterSpacing: 0.8,
+	},
+	value: {
+		fontSize: theme.typography.fontSize['3xl'],
+		fontWeight: theme.typography.fontWeight.bold,
+		color: theme.colors.gray800,
+		letterSpacing: 0.5,
+	},
+	actions: {
+		paddingTop: theme.spacing.lg,
+		paddingHorizontal: theme.spacing.sm,
+		borderTopWidth: 1,
+		borderTopColor: theme.colors.gray200,
+	},
+});

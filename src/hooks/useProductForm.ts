@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';  
+import { useState, useCallback, useEffect } from 'react';  
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';  
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';  
 import type { RootStackParamList } from '../navigation/types';  
@@ -47,9 +47,38 @@ export const useProductForm = (): UseProductFormReturn => {
   });  
   
   const [errors, setErrors] = useState<Record<string, string>>({});  
-  const [isLoading, setIsLoading] = useState(false);  
+  const [isLoading, setIsLoading] = useState(mode === 'edit' && Boolean(productId));
   const [isSubmitting, setIsSubmitting] = useState(false);  
   const [isIdChecking, setIsIdChecking] = useState(false);  
+
+  useEffect(() => {
+    const loadProductForEdit = async (): Promise<void> => {
+      if (mode !== 'edit' || !productId) {
+        return;
+      }
+
+      try {
+        const productToEdit = await productsApi.getProductById(productId);
+
+        setFormData({
+          id: productToEdit.id,
+          name: productToEdit.name,
+          description: productToEdit.description,
+          logo: productToEdit.logo,
+          date_release: productToEdit.date_release,
+          date_revision: productToEdit.date_revision,
+        });
+        setErrors({});
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Error al cargar el producto';
+        setErrors({ _form: errorMessage });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void loadProductForEdit();
+  }, [mode, productId]);
 
   const getFieldValidationError = useCallback(
     (field: keyof ProductFormData, data: ProductFormData): string | undefined => {

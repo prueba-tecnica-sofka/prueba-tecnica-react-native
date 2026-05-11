@@ -28,8 +28,11 @@ export const ProductFormScreen: React.FC<ProductFormScreenProps> = () => {
 
 	if (isLoading) {
 		return (
-			<View style={formStyles.container}>
+			<View style={formStyles.loadingContainer}>
 				<LoadingSpinner testID="product-form-loading" />
+				<Text style={formStyles.loadingText}>
+					{mode === 'edit' ? 'Cargando producto...' : 'Cargando formulario...'}
+				</Text>
 			</View>
 		);
 	}
@@ -37,8 +40,14 @@ export const ProductFormScreen: React.FC<ProductFormScreenProps> = () => {
 	return (
 		<View style={formStyles.container}>
 			<View style={formStyles.header}>
+				<Text style={formStyles.headerEyebrow}>Gestion de productos</Text>
 				<Text style={formStyles.headerTitle}>
 					{mode === 'edit' ? 'Editar Producto' : 'Nuevo Producto'}
+				</Text>
+				<Text style={formStyles.headerSubtitle}>
+					{mode === 'edit'
+						? 'Actualiza la informacion clave del producto financiero.'
+						: 'Completa los datos requeridos para registrar un nuevo producto financiero.'}
 				</Text>
 			</View>
 
@@ -48,6 +57,13 @@ export const ProductFormScreen: React.FC<ProductFormScreenProps> = () => {
 				keyboardShouldPersistTaps="handled"
 			>
 				<View style={formStyles.form}>
+					<View style={formStyles.formSectionHeader}>
+						<Text style={formStyles.formTitle}>Datos del producto</Text>
+						<Text style={formStyles.formDescription}>
+							Verifica cada campo antes de guardar. Las fechas deben cumplir las reglas de validacion del formulario.
+						</Text>
+					</View>
+
 					<ErrorMessage
 						testID="form-error"
 						message={errors._form}
@@ -64,7 +80,6 @@ export const ProductFormScreen: React.FC<ProductFormScreenProps> = () => {
 						disabled={isFieldDisabled('id')}
 						isEditMode={mode === 'edit'}
 						placeholder="Ingresa el identificador"
-						autoCapitalize="none"
 					/>
 
 					<Input
@@ -74,7 +89,7 @@ export const ProductFormScreen: React.FC<ProductFormScreenProps> = () => {
 						onChangeText={(value) => handleChange('name', value)}
 						onBlur={() => void handleBlur('name')}
 						error={errors.name}
-						placeholder="Ingresa el nombre"
+						placeholder="Nombre del producto"
 					/>
 
 					<Input

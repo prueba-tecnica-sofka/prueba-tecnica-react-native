@@ -7,6 +7,12 @@ export const productsApi = {
     const response = await apiClient.get<ApiResponse<Product[]>>('/bp/products');  
     return response.data;  
   },  
+
+  // GET /bp/products/:id
+  getProductById: async (id: string): Promise<Product> => {
+    const response = await apiClient.get<ApiResponse<Product>>(`/bp/products/${id}`);
+    return response.data;
+  },
   
   // POST /bp/products  
   createProduct: async (product: ProductInput): Promise<Product> => {  
