@@ -9,6 +9,8 @@ import {
 } from 'react-native';  
 import { useNavigation } from '@react-navigation/native';  
 import { theme } from '../../theme';
+import { FloatingActionButton } from '../../components/common/FloatingButton/FloatingButton';
+import ResultCounter from '../../components/products/ResultCounter/ResultCounter';
 import { productListScreenStyles as styles, searchInputPlaceholderColor } from './ProductListScreen.styles';
   
 interface Product {  
@@ -128,9 +130,7 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
       {/* Header con título y contador */}  
       <View style={styles.header}>  
         <Text style={styles.headerTitle}>Productos Financieros</Text>  
-        <Text style={styles.resultCount}>  
-          {filteredProducts.length} {filteredProducts.length === 1 ? 'resultado' : 'resultados'}  
-        </Text>  
+        <ResultCounter count={filteredProducts.length} />
       </View>  
   
       {/* Search Bar */}  
@@ -171,13 +171,11 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
       )}  
   
       {/* Floating Action Button para agregar */}  
-      <TouchableOpacity  
-        style={styles.fab}  
-        onPress={() => navigation.navigate('ProductForm', { mode: 'create' })}  
-        testID="add-product-button"  
-      >  
-        <Text style={styles.fabText}>+</Text>  
-      </TouchableOpacity>  
+      <FloatingActionButton
+        onPress={() => navigation.navigate('ProductForm', { mode: 'create' })}
+        testID="add-product-button"
+        accessibilityLabel="Agregar producto"
+      />
     </View>  
   );  
 };  

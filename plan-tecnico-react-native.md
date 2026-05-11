@@ -356,19 +356,19 @@ describe('ProductForm', () => {
 - [x] Tests
 
 ### Fase 5: F2 & F3 - Búsqueda y Contador 
-- [ ] SearchBar component con debounce
-- [ ] ResultCounter component
-- [ ] Integración en ProductListScreen
-- [ ] Tests de búsqueda
+- [x] SearchBar component con debounce
+- [x] ResultCounter component
+- [x] Integración en ProductListScreen
+- [x] Tests de búsqueda
 
 ### Fase 6: F4 - Crear Producto 
-- [ ] Validators
-- [ ] ProductFormScreen (modo create)
-- [ ] Validaciones en tiempo real
-- [ ] Verificación async de ID
-- [ ] Cálculo automático de date_revision
-- [ ] Tests de validación
-- [ ] Botón flotante "Agregar"
+- [x] Validators
+- [x] ProductFormScreen (modo create)
+- [x] Validaciones en tiempo real
+- [x] Verificación async de ID
+- [x] Cálculo automático de date_revision
+- [x] Tests de validación
+- [x] Botón flotante "Agregar"
 
 ### Fase 7: F5 - Editar Producto 
 - [ ] ProductFormScreen (modo edit)
