@@ -1,8 +1,9 @@
 import { ErrorMessages } from '../utils/error.messages';
 import { AppError, NetworkError, NotFoundError, ValidationError } from './errors';
 import { RequestConfig, RequestInterceptor, ResponseInterceptor, ErrorInterceptor } from './types';  
+import { getApiBaseUrl } from './config';
   
-const BASE_URL = 'http://localhost:3002';  
+const BASE_URL = getApiBaseUrl();  
 const DEFAULT_TIMEOUT = 10000;  
   
 class ApiClient {  
@@ -139,7 +140,7 @@ class ApiClient {
         return new AppError('Timeout de la solicitud', 408, error);
       }  
       if (error.message.includes('Network request failed')) {  
-        return new NetworkError(ErrorMessages.NETWORK_ERROR);
+        return new NetworkError(`${ErrorMessages.NETWORK_ERROR} API: ${this.baseUrl}`);
       }  
       return new AppError(error.message, 500, error);
     }  

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';  
 import ProductListScreen from './ProductListScreen';  
 import { NavigationContainer } from '@react-navigation/native';  
+import { productsApi } from '../../api/products.api';
 
 const mockNavigate = jest.fn() as jest.Mock;
 
@@ -15,9 +16,14 @@ jest.mock('@react-navigation/native', () => {
     }),
   };
 });
-  
-// Mock fetch  
-global.fetch = jest.fn();  
+
+jest.mock('../../api/products.api', () => ({
+  productsApi: {
+    getProducts: jest.fn(),
+  },
+}));
+
+const mockedProductsApi = productsApi as jest.Mocked<typeof productsApi>;
   
 describe('ProductListScreen', () => {  
   const mockProducts = [  
@@ -45,17 +51,14 @@ describe('ProductListScreen', () => {
   };  
   
   it('renders loading state initially', () => {  
-    (fetch as jest.Mock).mockImplementation(() => new Promise(() => {}));  
+    mockedProductsApi.getProducts.mockImplementation(() => new Promise(() => {}));
       
     const { getByText } = renderWithNavigation();  
     expect(getByText('Cargando productos...')).toBeTruthy();  
   });  
   
   it('renders product list after successful fetch', async () => {  
-    (fetch as jest.Mock).mockResolvedValue({  
-      ok: true,  
-      json: async () => ({ data: mockProducts }),  
-    });  
+    mockedProductsApi.getProducts.mockResolvedValue(mockProducts);
   
     const { getByText } = renderWithNavigation();  
   
@@ -65,7 +68,7 @@ describe('ProductListScreen', () => {
   });  
   
   it('displays error message on fetch failure', async () => {  
-    (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));  
+    mockedProductsApi.getProducts.mockRejectedValue(new Error('Network error'));  
   
     const { getByText } = renderWithNavigation();  
   
@@ -74,11 +77,8 @@ describe('ProductListScreen', () => {
     });  
   });  
 
-  it('displays API error message when response is not ok', async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      json: async () => ({}),
-    });
+  it('displays API error message when products service fails', async () => {
+    mockedProductsApi.getProducts.mockRejectedValue(new Error('Error al cargar productos'));
 
     const { getByText } = renderWithNavigation();
 
@@ -88,10 +88,7 @@ describe('ProductListScreen', () => {
   });
   
   it('filters products by search term', async () => {  
-    (fetch as jest.Mock).mockResolvedValue({  
-      ok: true,  
-      json: async () => ({ data: mockProducts }),  
-    });  
+    mockedProductsApi.getProducts.mockResolvedValue(mockProducts);
   
     const { getByTestId, getByText, queryByText } = renderWithNavigation();  
   
@@ -108,10 +105,7 @@ describe('ProductListScreen', () => {
   });  
   
   it('shows result count', async () => {  
-    (fetch as jest.Mock).mockResolvedValue({  
-      ok: true,  
-      json: async () => ({ data: mockProducts }),  
-    });  
+    mockedProductsApi.getProducts.mockResolvedValue(mockProducts);
   
     const { getByText } = renderWithNavigation();  
   
@@ -121,12 +115,9 @@ describe('ProductListScreen', () => {
   });  
 
   it('retries fetch when pressing retry button', async () => {
-    (fetch as jest.Mock)
+    mockedProductsApi.getProducts
       .mockRejectedValueOnce(new Error('Network error'))
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: mockProducts }),
-      });
+      .mockResolvedValueOnce(mockProducts);
 
     const { getByText } = renderWithNavigation();
 
@@ -142,10 +133,7 @@ describe('ProductListScreen', () => {
   });
 
   it('navigates to product detail when pressing a product card', async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: mockProducts }),
-    });
+    mockedProductsApi.getProducts.mockResolvedValue(mockProducts);
 
     const { getByTestId } = renderWithNavigation();
 
@@ -158,10 +146,7 @@ describe('ProductListScreen', () => {
   });
 
   it('navigates to product form when pressing add button', async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: mockProducts }),
-    });
+    mockedProductsApi.getProducts.mockResolvedValue(mockProducts);
 
     const { getByTestId } = renderWithNavigation();
 

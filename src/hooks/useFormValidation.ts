@@ -85,22 +85,6 @@ export function useFormValidation<T extends Record<string, any>>(
   );  
   
   /**  
-   * Maneja el evento blur de un campo  
-   * Valida el campo individual (estrategia On Blur)  
-   */  
-  const handleBlur = useCallback(  
-    async <K extends keyof T>(field: K) => {  
-      setTouched((prev) => ({ ...prev, [field]: true }));  
-  
-      const config = validationConfig[field];  
-      if (config?.validateOnBlur !== false) {  
-        await validateField(field);  
-      }  
-    },  
-    [validationConfig]  
-  );  
-  
-  /**  
    * Valida un campo individual  
    * Soporta validaciones síncronas y asíncronas  
    */  
@@ -128,6 +112,22 @@ export function useFormValidation<T extends Record<string, any>>(
     },  
     [runFieldValidation]  
   );  
+
+  /**  
+   * Maneja el evento blur de un campo  
+   * Valida el campo individual (estrategia On Blur)  
+   */  
+  const handleBlur = useCallback(  
+    async <K extends keyof T>(field: K) => {  
+      setTouched((prev) => ({ ...prev, [field]: true }));  
+
+      const config = validationConfig[field];  
+      if (config?.validateOnBlur !== false) {  
+        await validateField(field);  
+      }  
+    },  
+    [validationConfig, validateField]  
+  );
   
   /**  
    * Valida todos los campos del formulario  

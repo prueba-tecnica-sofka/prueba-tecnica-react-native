@@ -1,330 +1,184 @@
-# prueba-tecnica-react-native
+# Prueba Técnica React Native - Productos Financieros
 
-## Indicaciones generales
+Aplicación mobile construida con Expo, React Native y TypeScript para gestionar productos financieros contra una API local. Cubre las cinco funcionalidades requeridas: listado, búsqueda, contador, creación y edición, con validaciones de negocio, manejo de errores visual y una arquitectura modular orientada a Clean Code y principios SOLID.
 
-- Aplique todas las buenas prácticas, clean code, SOLID (se tomará en cuenta este punto
-para la calificación).
-- Se debe realizar el UI Develoment (Maquetación) sin usar frameworks de estilos o
-componentes prefabricados.
-- Se debe manejar excepciones y mostrar mensajes de errores visuales.
-- Se debe realizar pruebas unitarias y contar con un mínimo de 70% coverage.
-- Posterior a la entrega de este ejercicio, se estará agendando una entrevista técnica
-donde el candidato deberá defender la solución planteada.
+---
 
-> Nota: Los servicios necesarios a consumir para este proyecto son locales. Más adelante se detallará la manera de hacerlo.
+## Funcionalidades implementadas
 
+### F1 — Listado de productos
+Pantalla principal que consume `GET /bp/products` y renderiza un `FlatList` de tarjetas (`ProductCard`). Al tocar una tarjeta, navega a la pantalla de detalle mostrando toda la información del producto seleccionado.
 
-## Herramientas y tecnologías utilizadas
+### F2 — Búsqueda en tiempo real
+Campo de búsqueda integrado en la pantalla de listado con un debounce de 300 ms para evitar filtrar en cada pulsación. Filtra por nombre, descripción e ID de forma local sobre los productos ya cargados.
 
-- React Native
-- React
-- TypeScript
-- Pruebas unitarias de preferencia con Jest.
+### F3 — Contador de resultados
+Componente `ResultCounter` que se actualiza reactivamente junto al filtrado. Muestra el número de productos que coinciden con la búsqueda activa, o el total si no hay término.
 
+### F4 — Crear producto
+Formulario accesible desde un botón flotante (+) en la pantalla de listado. Valida cada campo antes de enviar:
 
-## Funcionalidades del Frontend
+| Campo | Regla |
+|---|---|
+| ID | Requerido, 3–10 caracteres, verificación asíncrona de unicidad |
+| Nombre | Requerido, 5–100 caracteres |
+| Descripción | Requerido, 10–200 caracteres |
+| Logo | Requerido (URL) |
+| Fecha de liberación | Requerido, igual o mayor a la fecha actual |
+| Fecha de revisión | Requerido, exactamente +1 año respecto a la fecha de liberación |
 
-### F1 Listado de productos financieros:
+Los errores de validación se muestran inline bajo cada campo. La verificación de ID es asíncrona y consulta `GET /bp/products/verification/:id` al salir del campo.
 
-Se requiere una aplicación para visualizar los diferentes productos financieros ofertados por un
-Banco cargados de una API. Realizar la maquetación en base al diseño D1. Al seleccionar un item,
-se mostrará toda la información de dicho item en otra vista.
+### F5 — Editar producto
+Mismo formulario que F4, accesible desde la pantalla de detalle. El campo ID se deshabilita en modo edición para evitar modificar el identificador. Los datos del producto se precargan automáticamente al abrir el formulario.
 
-### F2. búsqueda de productos financieros:
+---
 
-Se requiere realizar búsqueda de los productos financieros mediante un campo de texto. Realizar
-la maquetación en base al diseño D1.
-
-### F3. Cantidad de registros:
-
-Se requiere mostrar un listado de los registros obtenidos. Realizar la maquetación en base al
-diseño D1.
-
-### F4. Agregar producto:
-
-Se requiere la implementación un botón de “Agregar” para navegar al formulario de registro, el
-formulario debe permitir la creación de un producto mediante un botón “Agregar” y debe
-permitir la limpieza del formulario mediante un botón de “Reiniciar”. Realizar la maquetación del
-formulario base al diseño D2 y de la ubicación del botón principal en base a diseño D3.
-Cada campo del formulario contendrá su respectiva validación previa al envío del formulario:
-
-| **Campo**               | **Validación** |
-|--------------------------|----------------|
-| **Id**                   | - Requerido, mínimo 3 caracteres y máximo 10, validación de ser un Id que no exista mediante el consumo del servicio de verificación. |
-| **Nombre**               | - Requerido, mínimo 5 caracteres y máximo 100 |
-| **Descripción**          | - Requerido, mínimo 10 caracteres y máximo 200 |
-| **Logo**                 | - Requerido |
-| **Fecha de Liberación**  | - Requerido, la Fecha debe ser igual o mayor a la fecha actual |
-| **Fecha de Revisión**    | - Requerido, la Fecha debe ser exactamente un año posterior a la fecha de liberación |
-
-
-En caso de no cumplirse con alguna de las validaciones se deberá mostrar visualmente al usuario
-el estado de error de cada campo, de la siguiente manera:
-
-<p align="center">
-<img src="./images-readme/imagen-id-no-valido.jpg" width="400" alt="imagen de id no válido" />
-</p>
-
-
-### F5. Editar producto:
-
-Se requiere un botón que al realizar clic en el permita editar el producto, al hacer clic se deberá
-navegar a la pantalla de edición del producto y debe mantener el campo de ID deshabilitado, el
-formulario de editar debe mantener las mismas validaciones de la funcionabilidad F4 y mostrar
-errores por cada campo. Realizar la maquetación del formulario de edición en base al diseño D2.
-
-> Diseño D1
-
-<p align="center">
-    <img src="./images-readme/diseño-d1.jpg" width="400" alt="diseño D1" />
-</p>
-
-> Diseño D2
-
-<p align="center">
-    <img src="./images-readme/diseño-d2.jpg" width="250" alt="diseño D2" />
-</p>
-
-> Diseño D3
-
-<p align="center">
-    <img src="./images-readme/diseño-d3.jpg" width="250" alt="diseño D3" />
-</p>
-
-
-> Diseño D4
-
-<p align="center">
-    <img src="./images-readme/diseño-d4.jpg" width="250" alt="diseño D4" />
-</p>
-
-
-> Documentación
-
-| **Clave**        | **Tipo** | **Valor de ejemplo** | **Descripción** |
-|------------------|----------|----------------------|-----------------|
-| **id**           | String   | trj-crd              | Identificador único del producto. |
-| **name**         | String   | Tarjetas de Crédito  | Nombre del Producto. |
-| **description**  | String   | Tarjeta de consumo bajo la modalidad de crédito | Descripción del Producto. |
-| **logo**         | String   | https://www.visa.com.ec/dam/VCOM/regional/lac/SPA/Default/Pay%20With%20Visa/TarjetasVisa-signature-400x225.jpg | Url de un logo representativo para el producto |
-| **date_release** | Date     | 2023-02-01           | Fecha a liberar el producto para los clientes en General |
-| **date_revision**| Date     | 2024-02-01           | Fecha de revisión del producto para cambiar Términos y Condiciones |
-
-## Servicios
-
-Los servicios por consumir serán de manera local. Tendrá que correr un proyecto backend
-realizado con Node.js.
-Para hacerlo debe seguir los siguientes pasos:
-
-1. Descomprimir el archivo repo-interview-main.zip.
-2. Abrir un terminal apuntando a la carpeta descomprimida.
-3. Instalar las dependencias con npm install.
-4. Correr el proyecto con el comando npm run start:dev
-5. Se abrirá el servicio en el puerto http://localhost:3002
-
-> Url base:
-http://localhost:3002
-
-### OBTENER PRODUCTOS FINANCIEROS
-
-| **Campo**     | **Valor** |
-|---------------|------------|
-| **URL**       | `/bp/products` |
-| **METHOD**    | `GET` |
-| **EXAMPLE**   | `http://localhost:3002/bp/products` |
-| **RESPONSES** |             |
-
- 
-**Code** 200
-**Description** 
-
- ```json
- {
-  data": [
-    {
-      "id": "uno",
-      "name": "Nombre producto",
-      "description": "Descripción producto",
-      "logo": "assets-1.png",
-      "date_release": "2025-01-01",
-      "date_revision": "2025-01-01"
-    }
-  ]
- }
-```
-
-### CREAR PRODUCTOS FINANCIEROS
-
-| **Campo**     | **Valor** |
-|---------------|------------|
-| **URL**       | `/bp/products` |
-| **METHOD**    | `POST` |
-| **EXAMPLE**   | `http://localhost:3002/bp/products` |
-
-> REQUEST
-
-**Json body**
-
-```javascript
- {
-
-"id": "dos",
-"name": "Nombre producto",
-"description": "Descripción producto",
-"logo": "assets-1.png",
-"date_release": "2025-01-01",
-"date_revision": "2025-01-01"
-}
-```
-
-> RESPONSES
-
-**Code** 200
-
-**Description**
-
-```javascript
-{
-"message": "Product added successfully",
-"data": {
-"id": "dos",
-"name": "Nombre producto",
-"description": "Descripción producto",
-"logo": "assets-1.png",
-"date_release": "2025-01-01",
-"date_revision": "2025-01-01"
-}
-}
-```
-
-**Code** 400
-
-**Description**
-
-```javascript
-{
-
-"name": "BadRequestError",
-"message": "Invalid body, check 'errors' property for more info.",
-...
-}
-```
-
-### ACTUALIZAR PRODUCTO FINANCIERO
-
-| **Campo**     | **Valor** |
-|---------------|------------|
-| **URL**       | `/bp/products/:id` |
-| **METHOD**    | `PUT` |
-| **EXAMPLE**   | `http://localhost:3002/bp/products/uno` |
-| **REQUEST**   |             |
-
-> REQUEST
-
-**Json Body**
-
-```javascript
-
-{
-
-"name": "Nombre actualizado",
-"description": "Descripción producto",
-"logo": "assets-1.png",
-"date_release": "2025-01-01",
-"date_revision": "2025-01-01"
-}
-```
-> RESPONSES
-
-**Code:** 200
-
-**Description**
-
-```javascript
-{
-
-"message": "Product updated successfully",
-"data": {
-"name": "Nombre actualizado",
-"description": "Descripción producto",
-"logo": "assets-1.png",
-"date_release": "2025-01-01",
-"date_revision": "2025-01-01"
-  }
-}
-```
-
-**Code:** 404
-
-**Description**
-
-```javascript
-{
-
-"name": "NotFoundError",
-"message": "Not product found with that identifier",
-...
-}
+## Arquitectura
 
 ```
-
-### ELIMINAR PRODUCTOS FINANCIEROS
-
-| **Campo**     | **Valor** |
-|---------------|------------|
-| **URL**       | `/bp/products/:id` |
-| **METHOD**    | `DELETE` |
-| **EXAMPLE**   | `http://localhost:3002/bp/products/dos` |
-| **REQUEST**   |             |
-
-> PARAMS
-id - dos
-
-> RESPONSES
-
-**Code:** 200
-
-**Description**
-
-```javascript
-{
-
-"message": "Product removed successfully"
-}
+src/
+├── api/          # Cliente HTTP, endpoints y tipos de respuesta
+├── components/   # Componentes reutilizables (common/) y de dominio (products/)
+├── hooks/        # Lógica encapsulada: useProducts, useProductForm, useDebounce
+├── navigation/   # Stack Navigator y tipos de rutas
+├── screens/      # Pantallas: ProductList, ProductDetail, ProductForm
+├── store/        # Estado global con Zustand (productos + UI)
+├── validators/   # Reglas de validación independientes del formulario
+├── utils/        # Fechas, errores, constantes
+└── theme/        # Colores, tipografía y espaciado centralizados
 ```
 
-**Code:** 404
+**Decisiones de diseño:**
+- Los componentes de presentación no contienen lógica de negocio; ésta vive en hooks o en el store.
+- El módulo `validators/` es independiente de React para poder testear reglas sin montar componentes.
+- El cliente HTTP (`src/api/client.ts`) centraliza el manejo de errores HTTP y normaliza las respuestas antes de exponerlas.
+- Zustand se usa sin middleware adicional para mantener el estado predecible y fácil de testear.
 
-**Description**
+---
 
-```javascript
-{
+## Stack
 
-"name": "NotFoundError",
-"message": "Not product found with that identifier",
-...
-}
+| Capa | Tecnología |
+|---|---|
+| Framework | Expo / React Native |
+| Lenguaje | TypeScript strict |
+| Estado global | Zustand |
+| Navegación | React Navigation (Native Stack) |
+| Fechas nativas | @react-native-community/datetimepicker |
+| Testing | Jest + @testing-library/react-native |
+
+La UI es completamente custom: no se usan librerías de componentes prefabricados (sin Native Base, React Native Paper, etc.).
+
+---
+
+## Setup instructions
+
+### 1) Prerrequisitos
+
+- Node.js 18+ (recomendado LTS)
+- npm 9+
+- Expo Go instalado en el dispositivo (opcional, para prueba en físico)
+- Backend local corriendo en el puerto `3002`
+
+Para levantar el backend:
+1. Descomprimir `repo-interview-main.zip`.
+2. Abrir terminal en la carpeta descomprimida.
+3. Ejecutar `npm install` y luego `npm run start:dev`.
+4. El servicio quedará disponible en `http://localhost:3002`.
+
+### 2) Instalar dependencias del frontend
+
+```bash
+npm install
 ```
 
-### VERIFICACIÓN DE EXISTENCIA DE ID
+### 3) Configurar la URL de la API
 
-| **Campo**     | **Valor** |
-|---------------|------------|
-| **URL**       | `/bp/products/verification/:id` |
-| **METHOD**    | `GET` |
-| **EXAMPLE**   | `http://localhost:3002/bp/products/verification/uno` |
+**Emulador / simulador local:** no se requiere configuración extra, la app apunta a `http://localhost:3002` por defecto.
 
-> PARAMS
-id - uno
+**Expo Go en dispositivo físico:** `localhost` resuelve al propio teléfono, no al computador. Para conectarse al backend hay que apuntar a la IP local de la máquina de desarrollo. Crear un archivo `.env` en la raíz del proyecto:
 
-> RESPONSES
+```bash
+EXPO_PUBLIC_API_URL=http://TU_IP_LOCAL:3002
+# Ejemplo: EXPO_PUBLIC_API_URL=http://192.168.1.25:3002
+```
 
-| **Code**     | **Description** |
-|---------------|------------|
-| 200       | true/false (true existe / false no existe) |
+> El celular y la computadora deben estar en la misma red Wi-Fi.
 
-## ENTREGRABLES
+### 4) Levantar la app
 
-- La solución debe ser cargado a un repositorio Git público, se debe enviar la ruta de
-este repositorio.
-- Se debe entregar antes de la fecha y hora indicada por correo.
+```bash
+npm run start        # Metro bundler (escanear QR con Expo Go)
+npm run android      # Emulador Android
+npm run ios          # Simulador iOS (requiere macOS)
+npm run web          # Navegador
+```
+
+---
+
+## Guía de testing
+
+### Ejecutar la suite completa
+
+```bash
+npm test
+```
+
+Corre todos los archivos `*.test.ts` y `*.test.tsx` bajo `src/` y `App.tsx`. Al finalizar imprime un resumen de resultados en la terminal.
+
+### Ejecutar con reporte de cobertura
+
+```bash
+npm run test:coverage
+```
+
+Genera tres artefactos:
+
+| Artefacto | Ubicación |
+|---|---|
+| Resumen en terminal | salida estándar |
+| Reporte HTML navegable | `coverage/lcov-report/index.html` |
+| JSON con métricas brutas | `coverage/coverage-summary.json` |
+
+### Qué está cubierto por los tests
+
+Las pruebas priorizan las rutas críticas del negocio:
+
+- **Validaciones del formulario**: reglas de longitud, formato, fecha y unicidad de ID.
+- **Hooks de estado**: `useProducts`, `useProductForm`, `useDebounce`, `useErrorHandler`.
+- **Capa API**: `client.ts` y `products.api.ts` con fetch mockeado.
+- **Pantallas**: `ProductListScreen` y flujos de error/loading.
+- **Utils**: utilidades de fechas y mensajes de error.
+
+### Archivos excluidos del coverage
+
+Por configuración en `package.json` se excluyen del cómputo:
+- Archivos `*.styles.ts` (solo estilos, sin lógica)
+- Archivos de tipos (`src/types/`, `src/navigation/types.ts`)
+- Barriles de exportación (`index.ts`)
+
+---
+
+## API — Referencia de endpoints
+
+Base URL: `http://localhost:3002`
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/bp/products` | Obtener todos los productos |
+| `POST` | `/bp/products` | Crear un nuevo producto |
+| `PUT` | `/bp/products/:id` | Actualizar producto existente |
+| `DELETE` | `/bp/products/:id` | Eliminar producto |
+| `GET` | `/bp/products/verification/:id` | Verificar si un ID ya existe (`true`/`false`) |
+
+### Modelo de producto
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `id` | string | Identificador único (ej. `trj-crd`) |
+| `name` | string | Nombre del producto |
+| `description` | string | Descripción del producto |
+| `logo` | string | URL de imagen representativa |
+| `date_release` | string (ISO) | Fecha de liberación (`YYYY-MM-DD`) |
+| `date_revision` | string (ISO) | Fecha de revisión, siempre +1 año desde `date_release` |

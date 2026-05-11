@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { Button } from '../../components/common/Button/Button';
+import { DatePickerInput } from '../../components/common/DatePickerInput/DatePickerInput';
 import { ErrorMessage } from '../../components/common/ErrorMessage/ErrorMessage';
 import { IdInput } from '../../components/common/IdInput/IdInput';
 import { Input } from '../../components/common/Input/Input';
@@ -114,25 +115,21 @@ export const ProductFormScreen: React.FC<ProductFormScreenProps> = () => {
 						autoCapitalize="none"
 					/>
 
-					<Input
+					<DatePickerInput
 						testID="input-date-release"
 						label="Fecha de liberación"
 						value={formData.date_release}
-						onChangeText={(value) => handleChange('date_release', value)}
-						onBlur={() => void handleBlur('date_release')}
+						onChangeDate={(value) => handleChange('date_release', value)}
 						error={errors.date_release}
-						placeholder="YYYY-MM-DD"
+						minimumDate={mode === 'edit' ? undefined : new Date()}
 					/>
 
-					<Input
+					<DatePickerInput
 						testID="input-date-revision"
 						label="Fecha de revisión"
 						value={formData.date_revision}
-						onChangeText={(value) => handleChange('date_revision', value)}
-						onBlur={() => void handleBlur('date_revision')}
+						onChangeDate={(value) => handleChange('date_revision', value)}
 						error={errors.date_revision}
-						disabled={Boolean(formData.date_release)}
-						placeholder="YYYY-MM-DD"
 					/>
 
 					<View style={formStyles.buttonContainer}>

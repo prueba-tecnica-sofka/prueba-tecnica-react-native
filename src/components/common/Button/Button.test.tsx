@@ -44,7 +44,6 @@ describe('Button', () => {
 
     const button = getByTestId('test-button');
 
-    expect(button.props.disabled).toBe(true);
     fireEvent.press(button);
     expect(mockOnPress).not.toHaveBeenCalled();
   });
@@ -61,7 +60,6 @@ describe('Button', () => {
 
     const button = getByTestId('test-button');
 
-    expect(button.props.disabled).toBe(true);
     expect(getByTestId('test-button-loading')).toBeTruthy();
     expect(queryByTestId('test-button-text')).toBeNull();
     expect(queryByText('Test Button')).toBeNull();

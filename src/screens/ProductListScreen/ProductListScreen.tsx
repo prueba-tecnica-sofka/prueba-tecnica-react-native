@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from 'react';  
+import React from 'react';
 import {  
   View,  
   Text,  
   FlatList,  
   TouchableOpacity,  
   ActivityIndicator,  
-  TextInput,  
+  TextInput,
 } from 'react-native';  
 import { useNavigation } from '@react-navigation/native';  
 import { theme } from '../../theme';
 import { FloatingActionButton } from '../../components/common/FloatingButton/FloatingButton';
 import ResultCounter from '../../components/products/ResultCounter/ResultCounter';
 import { productListScreenStyles as styles, searchInputPlaceholderColor } from './ProductListScreen.styles';
-  
-interface Product {  
-  id: string;  
-  name: string;  
-  description: string;  
-  logo: string;  
-  date_release: string;  
-  date_revision: string;  
-}  
+import type { Product } from '../../api/types';
+import { useProducts } from '../../hooks/useProducts';
   
 interface ProductListScreenProps {  
   // Props pueden ser agregadas según necesidad  
@@ -28,51 +21,14 @@ interface ProductListScreenProps {
   
 const ProductListScreen: React.FC<ProductListScreenProps> = () => {  
   const navigation = useNavigation<any>();  
-  const [products, setProducts] = useState<Product[]>([]);  
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);  
-  const [searchTerm, setSearchTerm] = useState('');  
-  const [isLoading, setIsLoading] = useState(true);  
-  const [error, setError] = useState<string | null>(null);  
-  
-  // Fetch products from API  
-  useEffect(() => {  
-    fetchProducts();  
-  }, []);  
-  
-  // Filter products based on search term  
-  useEffect(() => {  
-    if (searchTerm.trim() === '') {  
-      setFilteredProducts(products);  
-    } else {  
-      const filtered = products.filter(  
-        (product) =>  
-          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||  
-          product.id.toLowerCase().includes(searchTerm.toLowerCase()) ||  
-          product.description.toLowerCase().includes(searchTerm.toLowerCase())  
-      );  
-      setFilteredProducts(filtered);  
-    }  
-  }, [searchTerm, products]);  
-  
-  const fetchProducts = async () => {  
-    try {  
-      setIsLoading(true);  
-      setError(null);  
-      const response = await fetch('http://localhost:3002/bp/products');  
-        
-      if (!response.ok) {  
-        throw new Error('Error al cargar productos');  
-      }  
-        
-      const data = await response.json();  
-      setProducts(data.data || []);  
-      setFilteredProducts(data.data || []);  
-    } catch (err) {  
-      setError(err instanceof Error ? err.message : 'Error desconocido');  
-    } finally {  
-      setIsLoading(false);  
-    }  
-  };  
+  const {
+    filteredProducts,
+    searchTerm,
+    isLoading,
+    error,
+    setSearchTerm,
+    refreshProducts,
+  } = useProducts();
   
   const handleProductPress = (product: Product) => {  
     navigation.navigate('ProductDetail', { productId: product.id });  
@@ -84,18 +40,11 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
       onPress={() => handleProductPress(item)}  
       testID={`product-card-${item.id}`}  
     >  
-      <View style={styles.cardHeader}>  
-        <Text style={styles.productId}>{item.id}</Text>  
+      <View style={styles.productInfo}>  
+        <Text style={styles.productName}>{item.name}</Text>  
+        <Text style={styles.productId}>ID: {item.id}</Text>  
       </View>  
-      <Text style={styles.productName}>{item.name}</Text>  
-      <Text style={styles.productDescription} numberOfLines={2}>  
-        {item.description}  
-      </Text>  
-      <View style={styles.cardFooter}>  
-        <Text style={styles.dateText}>  
-          Liberación: {new Date(item.date_release).toLocaleDateString()}  
-        </Text>  
-      </View>  
+      <Text style={styles.productChevron}>›</Text>
     </TouchableOpacity>  
   );  
   
@@ -110,7 +59,7 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
   const renderErrorState = () => (  
     <View style={styles.errorState}>  
       <Text style={styles.errorText}>{error}</Text>  
-      <TouchableOpacity style={styles.retryButton} onPress={fetchProducts}>  
+      <TouchableOpacity style={styles.retryButton} onPress={() => void refreshProducts()}>  
         <Text style={styles.retryButtonText}>Reintentar</Text>  
       </TouchableOpacity>  
     </View>  
@@ -127,17 +76,18 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
   
   return (  
     <View style={styles.container}>  
-      {/* Header con título y contador */}  
-      <View style={styles.header}>  
-        <Text style={styles.headerTitle}>Productos Financieros</Text>  
+      <View style={styles.brandHeader}>
+        <Text style={styles.brandTitle}>BANCO</Text>
+      </View>
+
+      <View style={styles.searchSection}>  
         <ResultCounter count={filteredProducts.length} />
-      </View>  
-  
-      {/* Search Bar */}  
+      </View>
+
       <View style={styles.searchContainer}>  
         <TextInput  
           style={styles.searchInput}  
-          placeholder="Buscar productos..."  
+          placeholder="Search..."  
           placeholderTextColor={searchInputPlaceholderColor}
           value={searchTerm}  
           onChangeText={setSearchTerm}  
@@ -154,7 +104,6 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
         )}  
       </View>  
   
-      {/* Product List */}  
       {error ? (  
         renderErrorState()  
       ) : (  
@@ -162,6 +111,8 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
           data={filteredProducts}  
           renderItem={renderProductCard}  
           keyExtractor={(item) => item.id}  
+          onRefresh={() => void refreshProducts()}
+          refreshing={isLoading}
           contentContainerStyle={  
             filteredProducts.length === 0 ? styles.emptyList : styles.list  
           }  
@@ -170,7 +121,6 @@ const ProductListScreen: React.FC<ProductListScreenProps> = () => {
         />  
       )}  
   
-      {/* Floating Action Button para agregar */}  
       <FloatingActionButton
         onPress={() => navigation.navigate('ProductForm', { mode: 'create' })}
         testID="add-product-button"

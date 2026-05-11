@@ -143,11 +143,11 @@ describe('ProductFormScreen - Edit Mode', () => {
     expect(getByText('Cargando producto...')).toBeTruthy();  
   });  
   
-  it('keeps date_revision disabled when date_release is present in edit mode', () => {
+  it('allows editing date_revision in edit mode', () => {
     const { getByTestId } = renderWithNavigation();  
       
-    const revisionInput = getByTestId('input-date-revision-input');  
-    expect(isDisabled(revisionInput.props as Record<string, unknown>)).toBe(true);
+    const revisionInput = getByTestId('input-date-revision-button');  
+    expect(isDisabled(revisionInput.props as Record<string, unknown>)).toBe(false);
   });  
   
   it('does not show auto-calculated text in edit mode', () => {  

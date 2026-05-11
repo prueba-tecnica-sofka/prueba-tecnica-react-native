@@ -13,7 +13,6 @@ import {
   validateProductForm,  
 } from '../validators/product.validator';  
 import type { ValidationResult } from '../validators/validation.types';  
-import { calculateRevisionDate } from '../utils/date.utils';  
 import { productsApi } from '../api/products.api';  
   
 type ProductFormNavigationProp = NativeStackNavigationProp<RootStackParamList, 'ProductForm'>;  
@@ -114,10 +113,6 @@ export const useProductForm = (): UseProductFormReturn => {
     (field: keyof ProductFormData, value: string) => {
       setFormData((prev: ProductFormData) => {
         const nextData: ProductFormData = { ...prev, [field]: value };
-
-        if (field === 'date_release') {
-          nextData.date_revision = value ? calculateRevisionDate(value) : '';
-        }
 
         setErrors((prevErrors) => {
           const nextErrors = { ...prevErrors };

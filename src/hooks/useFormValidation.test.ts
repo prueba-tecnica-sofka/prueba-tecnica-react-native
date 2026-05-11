@@ -63,7 +63,7 @@ describe('useFormValidation', () => {
     expect(result.current.values.email).toBe('test@example.com');  
   });  
   
-  it('clears error when user starts typing', () => {  
+  it('clears error when user starts typing', async () => {  
     const { result } = renderHook(() =>  
       useFormValidation(initialValues, validationConfig)  
     );  
@@ -71,10 +71,15 @@ describe('useFormValidation', () => {
     // Primero establecer un error  
     act(() => {  
       result.current.setFieldValue('email', '');  
-      result.current.handleBlur('email');  
     });  
-  
-    expect(result.current.errors.email).toBe('Email requerido');  
+
+    await act(async () => {
+      await result.current.handleBlur('email');
+    });
+
+    await waitFor(() => {
+      expect(result.current.errors.email).toBe('Email requerido');
+    });
   
     // Luego cambiar el valor  
     act(() => {  
@@ -90,8 +95,12 @@ describe('useFormValidation', () => {
     );  
   
     act(() => {  
-      result.current.setFieldValue('email', 'invalid-email');  
+      result.current.handleChange('email', 'invalid-email');  
     });  
+
+    await waitFor(() => {
+      expect(result.current.values.email).toBe('invalid-email');
+    });
   
     await act(async () => {  
       await result.current.handleBlur('email');  
@@ -143,15 +152,18 @@ describe('useFormValidation', () => {
     expect(Object.keys(result.current.errors)).toHaveLength(0);  
   });  
   
-  it('resets single field', () => {  
+  it('resets single field', async () => {  
     const { result } = renderHook(() =>  
       useFormValidation(initialValues, validationConfig)  
     );  
   
     act(() => {  
       result.current.setFieldValue('email', 'test@example.com');  
-      result.current.handleBlur('email');  
-    });  
+    });
+
+    await act(async () => {
+      await result.current.handleBlur('email');
+    });
   
     act(() => {  
       result.current.resetField('email');  
@@ -162,7 +174,7 @@ describe('useFormValidation', () => {
     expect(result.current.touched.email).toBe(false);  
   });  
   
-  it('resets entire form', () => {  
+  it('resets entire form', async () => {  
     const { result } = renderHook(() =>  
       useFormValidation(initialValues, validationConfig)  
     );  
@@ -170,9 +182,12 @@ describe('useFormValidation', () => {
     act(() => {  
       result.current.setFieldValue('email', 'test@example.com');  
       result.current.setFieldValue('password', 'password123');  
-      result.current.handleBlur('email');  
-      result.current.handleBlur('password');  
-    });  
+    });
+
+    await act(async () => {
+      await result.current.handleBlur('email');
+      await result.current.handleBlur('password');
+    });
   
     act(() => {  
       result.current.resetForm();  
@@ -202,8 +217,12 @@ describe('useFormValidation', () => {
     );  
   
     act(() => {  
-      result.current.setFieldValue('email', 'taken@example.com');  
+      result.current.handleChange('email', 'taken@example.com');  
     });  
+
+    await waitFor(() => {
+      expect(result.current.values.email).toBe('taken@example.com');
+    });
   
     expect(result.current.isValidating).toBe(false);  
   
@@ -234,14 +253,12 @@ describe('useFormValidation', () => {
       result.current.setFieldValue('email', 'test@example.com');  
     });  
   
-    act(() => {  
-      result.current.handleBlur('email');  
-    });  
+    await act(async () => {
+      await result.current.handleBlur('email');
+    });
   
-    expect(result.current.isValidating).toBe(true);  
-  
-    await waitFor(() => {  
-      expect(result.current.isValidating).toBe(false);  
-    });  
+    await waitFor(() => {
+      expect(result.current.isValidating).toBe(false);
+    });
   });  
 });

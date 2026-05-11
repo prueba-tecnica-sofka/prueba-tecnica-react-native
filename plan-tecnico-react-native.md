@@ -378,7 +378,7 @@ describe('ProductForm', () => {
 - [x] Tests
 
 ### Fase 8: Pulido & Testing 
-- [ ] Alcanzar ≥70% coverage
+- [x] Alcanzar ≥70% coverage
 - [ ] Manejo de errores visuales
 - [ ] Loading states
 - [ ] Empty states
