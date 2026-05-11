@@ -348,12 +348,12 @@ describe('ProductForm', () => {
 - [x] Tests para API layer
 
 ### Fase 4: F1 - Lista de Productos 
-- [ ] ProductCard component
-- [ ] ProductList component
-- [ ] ProductListScreen
-- [ ] Navegación a detalle
-- [ ] ProductDetailScreen
-- [ ] Tests
+- [x] ProductCard component
+- [x] ProductList component
+- [x] ProductListScreen
+- [x] Navegación a detalle
+- [x] ProductDetailScreen
+- [x] Tests
 
 ### Fase 5: F2 & F3 - Búsqueda y Contador 
 - [ ] SearchBar component con debounce
@@ -361,7 +361,7 @@ describe('ProductForm', () => {
 - [ ] Integración en ProductListScreen
 - [ ] Tests de búsqueda
 
-### Fase 6: F4 - Crear Producto (Día 3-4)
+### Fase 6: F4 - Crear Producto 
 - [ ] Validators
 - [ ] ProductFormScreen (modo create)
 - [ ] Validaciones en tiempo real
@@ -388,8 +388,6 @@ describe('ProductForm', () => {
 
 ### Fase 9: Documentación 
 - [ ] README con setup instructions
-- [ ] Comentarios JSDoc en funciones complejas
-- [ ] Diagrama de arquitectura
 - [ ] Guía de testing
 
 ---
