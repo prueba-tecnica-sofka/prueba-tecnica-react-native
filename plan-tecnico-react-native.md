@@ -272,8 +272,8 @@ api.interceptors.response.use(
 #### Store Layer
 ```typescript
 try {
-  const response = await api.post('/bp/products', product);
-  set({ products: [...get().products, response.data.data] });
+  const createdProduct = await productsApi.createProduct(product);
+  set({ products: [...get().products, createdProduct] });
 } catch (error) {
   set({ error: error.message });
   throw error; // Re-throw para que UI pueda manejarlo
@@ -329,9 +329,8 @@ describe('ProductForm', () => {
 ## 10. PLAN DE IMPLEMENTACIÓN
 
 ### Fase 1: Setup & Fundaciones 
-- [ ] Inicializar proyecto React Native + TypeScript
-- [ ] Configurar ESLint + Prettier (clean code)
-- [ ] Estructura de carpetas
+- [x] Inicializar proyecto React Native + TypeScript
+- [x] Estructura de carpetas
 - [ ] Configurar Jest + Testing Library
 - [ ] Theme system (colores, tipografía, espaciado)
 
@@ -340,7 +339,6 @@ describe('ProductForm', () => {
 - [ ] Input component + tests
 - [ ] ErrorMessage component + tests
 - [ ] LoadingSpinner component
-- [ ] Crear Storybook/showcase para componentes (opcional)
 
 ### Fase 3: API & Store 
 - [ ] API client con interceptors
