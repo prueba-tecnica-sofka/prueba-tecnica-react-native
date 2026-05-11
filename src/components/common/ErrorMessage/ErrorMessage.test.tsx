@@ -58,4 +58,29 @@ describe('ErrorMessage', () => {
     expect(flattenedTextStyle.fontSize).toBe(theme.typography.fontSize.sm);
     expect(flattenedTextStyle.fontWeight).toBe(theme.typography.fontWeight.medium);
   });
+
+  it('renders message from error prop when message is not provided', () => {
+    const { getByText } = render(
+      <ErrorMessage
+        visible
+        error={new Error('Network request failed')}
+        testID="error-from-object"
+      />
+    );
+
+    expect(getByText('Network request failed')).toBeTruthy();
+  });
+
+  it('uses fallbackMessage when error cannot be resolved', () => {
+    const { getByText } = render(
+      <ErrorMessage
+        visible
+        error={{}}
+        fallbackMessage="Fallback inline message"
+        testID="error-fallback"
+      />
+    );
+
+    expect(getByText('Fallback inline message')).toBeTruthy();
+  });
 });

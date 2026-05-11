@@ -341,11 +341,11 @@ describe('ProductForm', () => {
 - [x] LoadingSpinner component
 
 ### Fase 3: API & Store 
-- [ ] API client con interceptors
-- [ ] Products API methods (CRUD + verify)
-- [ ] Zustand store para productos
-- [ ] Error handling centralizado
-- [ ] Tests para API layer
+- [x] API client con interceptors
+- [x] Products API methods (CRUD + verify)
+- [x] Zustand store para productos
+- [x] Error handling centralizado
+- [x] Tests para API layer
 
 ### Fase 4: F1 - Lista de Productos 
 - [ ] ProductCard component
